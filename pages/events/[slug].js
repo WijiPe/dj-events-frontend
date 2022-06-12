@@ -27,11 +27,12 @@ export default function EventPage ({evt}) {
                 <span>
                 {new Date(evt.attributes.date).toLocaleDateString('en-US')} at {evt.attributes.time}
                 </span>
-                {/* {evt.attributes.image.data.attributes.formats.thumbnail.url} */}
                 <h1>{evt.attributes.name}</h1>
                 {evt.attributes.image && (
                     <div className={styles.image}>
-                        <Image src={evt.attributes.image.data.attributes.formats.thumbnail.url} width={960} height={600} />
+                        <Image src={evt.attributes.image.data ? evt.attributes.image.data.attributes.formats.small.url : '/images/event-default.png'}  
+                        width={960} 
+                        height={600} />
                     </div>
                 )}
                 <h3>Performer:</h3>
@@ -64,7 +65,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params: {slug} }) {
-  const res = await fetch(`${API_URL}/api/events?populate=*?slug=${slug}`)
+  const res = await fetch(`${API_URL}/api/events?populate=*&slug=${slug}`)
   const events = await res.json()
 
   return {
